@@ -3,8 +3,6 @@ import UIKit
 final class MakeTrackerViewController: UIViewController {
     weak var trackersViewController: TrackerSettingsViewControllerDelegate?
     
-  
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureViewAppearance()

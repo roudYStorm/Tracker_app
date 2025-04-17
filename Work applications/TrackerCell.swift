@@ -17,7 +17,7 @@ final class TrackerCell: UICollectionViewCell {
    
     weak var delegate: TrackerCellDelegate?
     var id: UUID?
-    var isComplted = false
+    var isComplеted = false
     var isCompletable = false
     
    
@@ -37,7 +37,7 @@ final class TrackerCell: UICollectionViewCell {
         daysLabel.text = formatDaysString(daysCompleted)
         id = tracker.id
         isCompletable = canComplete
-        isComplted = isCompleted
+        isComplеted = isCompleted
     }
     
    
@@ -123,12 +123,12 @@ final class TrackerCell: UICollectionViewCell {
         guard isCompletable, let id = id else { return }
         
         
-        isComplted.toggle()
-        let newButtonImage = isComplted ? UIImage(resource: .done) : UIImage(resource: .plus)
+        isComplеted.toggle()
+        let newButtonImage = isComplеted ? UIImage(resource: .done) : UIImage(resource: .plus)
         doneButton.setImage(newButtonImage.withTintColor(.white), for: .normal)
-        doneButton.alpha = isComplted ? 0.3 : 1.0
+        doneButton.alpha = isComplеted ? 0.3 : 1.0
         
-        delegate?.didTapDoneButton(isCompleted: isComplted, trackerId: id)
+        delegate?.didTapDoneButton(isCompleted: isComplеted, trackerId: id)
     }
 }
 

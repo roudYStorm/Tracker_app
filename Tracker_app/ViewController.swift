@@ -25,7 +25,7 @@ final class TrackersViewController: UIViewController, TrackerSettingsViewControl
         
        
         guard indexPath.section < visibleCategories.count else {
-            header.titleLabel.text = "ljjlkhk"
+            header.titleLabel.text = "название"
             return header
         }
         
@@ -34,6 +34,8 @@ final class TrackersViewController: UIViewController, TrackerSettingsViewControl
     }
     
     private let datePicker = UIDatePicker()
+    private let placeholder = UIImageView()
+    private let placeholderLabel = UILabel()
     private var currentDate = Date()
     private var categories = [TrackerCategory]()
     private var visibleCategories = [TrackerCategory]()
@@ -54,16 +56,18 @@ final class TrackersViewController: UIViewController, TrackerSettingsViewControl
         view.backgroundColor = .systemBackground
         configureNavigationBar()
         setupCollectionView()
+        makePlaceholder()
+        makePlaceholderLabel()
         setupConstraints()
     }
     
+    
     private func configureNavigationBar() {
         title = "Трекеры"
+        let button = UIButton.systemButton(with: UIImage(resource: .plus), target: self, action: #selector(addTrackerButtonTapped))
+        button.tintColor = .ypBlack
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "plus"),
-            style: .plain,
-            target: self,
-            action: #selector(addTrackerButtonTapped)
+            customView: button
         )
         
         datePicker.preferredDatePickerStyle = .compact
@@ -101,6 +105,21 @@ final class TrackersViewController: UIViewController, TrackerSettingsViewControl
     }
     
     
+    private func makePlaceholder(){
+        placeholder.image = UIImage(resource: .star)
+        placeholder.contentMode = .scaleAspectFill
+        placeholder.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(placeholder)
+        
+    }
+    
+    private func makePlaceholderLabel(){
+        placeholderLabel.text = "Что будем отслеживать?"
+        placeholderLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        placeholderLabel.textColor = UIColor(resource: .ypBlack)
+        placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(placeholderLabel)
+    }
     
     private func updateVisibleTrackers() {
         let calendar = Calendar.current
@@ -127,6 +146,8 @@ final class TrackersViewController: UIViewController, TrackerSettingsViewControl
         
         collectionView.reloadData()
         collectionView.isHidden = visibleCategories.isEmpty
+        placeholder.isHidden = !visibleCategories.isEmpty
+        placeholderLabel.isHidden = !visibleCategories.isEmpty
     }
     
     
@@ -157,7 +178,14 @@ final class TrackersViewController: UIViewController, TrackerSettingsViewControl
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            placeholder.topAnchor.constraint(equalTo: view.topAnchor, constant: 402),
+            placeholder.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            placeholder.widthAnchor.constraint(equalToConstant: 80),
+            placeholder.heightAnchor.constraint(equalToConstant: 80),
+            placeholderLabel.topAnchor.constraint(equalTo: placeholder.bottomAnchor, constant: 8),
+            placeholderLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
         ])
     }
 }
@@ -243,6 +271,7 @@ extension TrackersViewController {
         
             updateVisibleTrackers()
         }
+    
 }
 
 
