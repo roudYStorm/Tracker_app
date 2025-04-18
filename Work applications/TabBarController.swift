@@ -9,7 +9,7 @@ final class TabBarController: UITabBarController {
     }
     
     private func configureTabBarAppearance() {
-        tabBar.tintColor = .blue
+        tabBar.tintColor = .yPblue
         tabBar.unselectedItemTintColor = .gray
         tabBar.backgroundColor = .white
     }
@@ -38,7 +38,7 @@ final class TabBarController: UITabBarController {
         let controller = StatisticsViewController()
         controller.tabBarItem = UITabBarItem(
             title: "Статистика",
-            image: UIImage(resource: .statisticsTabBarIcon),
+            image: UIImage(resource: .statisticsTabBarItem),
             tag: 1
         )
         return controller
@@ -50,5 +50,3 @@ final class TabBarController: UITabBarController {
         return navController
     }
 }
-
-

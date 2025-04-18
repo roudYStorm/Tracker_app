@@ -19,6 +19,10 @@ final class TrackerSettingsViewController: UIViewController, ScheduleViewControl
     private let textField = UITextField()
     private let button = UIButton()
     private let clearButton = UIButton(type: .custom)
+    private let colors: [UIColor] = [
+        .colorSelection1, .colorSelection2, .colorSelection3, .colorSelection4, .colorSelection5, .colorSelection6, .colorSelection7, .colorSelection8, .colorSelection9, .colorSelection10, .colorSelection11, .colorSelection12, .colorSelection13, .colorSelection14, .colorSelection15, .colorSelection16, .colorSelection17, .colorSelection18
+    ]
+    
     
     func setWeekdays(weekdays: [Weekday]) {
         selectedWeekdays = weekdays
@@ -37,7 +41,7 @@ final class TrackerSettingsViewController: UIViewController, ScheduleViewControl
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
-
+    
     private func makeTextField() -> UITextField {
         let textField = UITextField()
         textField.backgroundColor = UIColor.systemGray6
@@ -110,7 +114,7 @@ final class TrackerSettingsViewController: UIViewController, ScheduleViewControl
             let tracker = Tracker(
                 id: UUID(),
                 name: textField.text ?? "",
-                color: .colorSelection12,
+                color: colors.randomElement() ?? .colorSelection12,
                 emoji: "❤️",
                 calendar: nil,
                 date: Date()
@@ -127,14 +131,14 @@ final class TrackerSettingsViewController: UIViewController, ScheduleViewControl
         let tracker = Tracker(
             id: UUID(),
             name: textField.text ?? "",
-            color: .colorSelection12,
+            color: colors.randomElement() ?? .colorSelection12,
             emoji: "❤️",
             calendar: selectedWeekdays,
             date: nil
         )
         delegate?.addTracker(category: "Немного веселья", tracker: tracker)
     }
-
+    
     private func setupClearButton() {
         clearButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
         clearButton.tintColor = .gray
@@ -156,13 +160,13 @@ final class TrackerSettingsViewController: UIViewController, ScheduleViewControl
     private func didTapCancelButton() {
         self.dismiss(animated: true, completion: nil)
     }
-
+    
     @objc
     private func didEditTextField() {
         let isEmpty = textField.text?.isEmpty ?? true
         clearButton.isHidden = isEmpty
     }
-
+    
     @objc
     private func clearTextField() {
         textField.text = ""
