@@ -25,6 +25,7 @@
 		EB5D530B2DB03833006802C9 /* MakeTrackerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D530A2DB03833006802C9 /* MakeTrackerVC.swift */; };
 		EB5D530D2DB038A3006802C9 /* scheduleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D530C2DB038A3006802C9 /* scheduleVC.swift */; };
 		EB5D530F2DB038C6006802C9 /* SupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D530E2DB038C6006802C9 /* SupplementaryView.swift */; };
+		EBCC091C2DB3A512001CD63C /* EmojiColorSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCC091B2DB3A512001CD63C /* EmojiColorSelectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		EB5D530A2DB03833006802C9 /* MakeTrackerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeTrackerVC.swift; sourceTree = "<group>"; };
 		EB5D530C2DB038A3006802C9 /* scheduleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = scheduleVC.swift; sourceTree = "<group>"; };
 		EB5D530E2DB038C6006802C9 /* SupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementaryView.swift; sourceTree = "<group>"; };
+		EBCC091B2DB3A512001CD63C /* EmojiColorSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiColorSelectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +160,7 @@
 				EB5D530A2DB03833006802C9 /* MakeTrackerVC.swift */,
 				EB5D530C2DB038A3006802C9 /* scheduleVC.swift */,
 				EB5D530E2DB038C6006802C9 /* SupplementaryView.swift */,
+				EBCC091B2DB3A512001CD63C /* EmojiColorSelectionView.swift */,
 			);
 			path = "Work applications";
 			sourceTree = "<group>";
@@ -295,6 +298,7 @@
 			files = (
 				EB5D52FE2DB036C5006802C9 /* ViewUI.swift in Sources */,
 				EB5D53002DB036DD006802C9 /* StructureTrackers.swift in Sources */,
+				EBCC091C2DB3A512001CD63C /* EmojiColorSelectionView.swift in Sources */,
 				EB5D52D22DB02B0F006802C9 /* ViewController.swift in Sources */,
 				EB5D52CE2DB02B0F006802C9 /* AppDelegate.swift in Sources */,
 				EB5D53052DB037B3006802C9 /* TabBarController.swift in Sources */,
