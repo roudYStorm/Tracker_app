@@ -6,6 +6,7 @@ final class SupplementaryView: UICollectionReusableView {
     let titleLabel = UILabel()
     
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureLabel()
