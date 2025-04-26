@@ -25,6 +25,17 @@
 		EB5D530B2DB03833006802C9 /* MakeTrackerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D530A2DB03833006802C9 /* MakeTrackerVC.swift */; };
 		EB5D530D2DB038A3006802C9 /* scheduleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D530C2DB038A3006802C9 /* scheduleVC.swift */; };
 		EB5D530F2DB038C6006802C9 /* SupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D530E2DB038C6006802C9 /* SupplementaryView.swift */; };
+		EBCC09442DBBB953001CD63C /* Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EBCC09422DBBB953001CD63C /* Tracker.xcdatamodeld */; };
+		EBCC09462DBBBA73001CD63C /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCC09452DBBBA73001CD63C /* TrackerCategoryStore.swift */; };
+		EBCC09482DBBBA91001CD63C /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCC09472DBBBA91001CD63C /* TrackerRecordStore.swift */; };
+		EBCC094A2DBBBB03001CD63C /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCC09492DBBBB03001CD63C /* TrackerStore.swift */; };
+		EBCC094C2DBBBB27001CD63C /* Bit.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCC094B2DBBBB27001CD63C /* Bit.swift */; };
+		EBCC094E2DBBBB3E001CD63C /* ScheduleConvertor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCC094D2DBBBB3E001CD63C /* ScheduleConvertor.swift */; };
+		EBCC09502DBBBB5D001CD63C /* UIColorMarshalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCC094F2DBBBB5D001CD63C /* UIColorMarshalling.swift */; };
+		EBCC09522DBBBB7B001CD63C /* TrackerStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCC09512DBBBB7B001CD63C /* TrackerStoreError.swift */; };
+		EBCC09542DBBBB90001CD63C /* CategoryStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCC09532DBBBB90001CD63C /* CategoryStoreError.swift */; };
+		EBCC09562DBBBBA5001CD63C /* TrackerRecordStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCC09552DBBBBA5001CD63C /* TrackerRecordStoreError.swift */; };
+		EBCC09582DBBBC3F001CD63C /* Weekdays.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCC09572DBBBC3F001CD63C /* Weekdays.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +78,17 @@
 		EB5D530A2DB03833006802C9 /* MakeTrackerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeTrackerVC.swift; sourceTree = "<group>"; };
 		EB5D530C2DB038A3006802C9 /* scheduleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = scheduleVC.swift; sourceTree = "<group>"; };
 		EB5D530E2DB038C6006802C9 /* SupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementaryView.swift; sourceTree = "<group>"; };
+		EBCC09432DBBB953001CD63C /* Tracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Tracker.xcdatamodel; sourceTree = "<group>"; };
+		EBCC09452DBBBA73001CD63C /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
+		EBCC09472DBBBA91001CD63C /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
+		EBCC09492DBBBB03001CD63C /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
+		EBCC094B2DBBBB27001CD63C /* Bit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bit.swift; sourceTree = "<group>"; };
+		EBCC094D2DBBBB3E001CD63C /* ScheduleConvertor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleConvertor.swift; sourceTree = "<group>"; };
+		EBCC094F2DBBBB5D001CD63C /* UIColorMarshalling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorMarshalling.swift; sourceTree = "<group>"; };
+		EBCC09512DBBBB7B001CD63C /* TrackerStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreError.swift; sourceTree = "<group>"; };
+		EBCC09532DBBBB90001CD63C /* CategoryStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryStoreError.swift; sourceTree = "<group>"; };
+		EBCC09552DBBBBA5001CD63C /* TrackerRecordStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStoreError.swift; sourceTree = "<group>"; };
+		EBCC09572DBBBC3F001CD63C /* Weekdays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weekdays.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +119,7 @@
 		EB5D52C12DB02B0F006802C9 = {
 			isa = PBXGroup;
 			children = (
+				EBCC093F2DBBB8E7001CD63C /* CoreData */,
 				EB5D53012DB0374F006802C9 /* Work applications */,
 				EB5D52CC2DB02B0F006802C9 /* Tracker_app */,
 				EB5D52E32DB02B13006802C9 /* Tracker_appTests */,
@@ -121,6 +144,7 @@
 				EB5D52CD2DB02B0F006802C9 /* AppDelegate.swift */,
 				EB5D52CF2DB02B0F006802C9 /* SceneDelegate.swift */,
 				EB5D52D12DB02B0F006802C9 /* ViewController.swift */,
+				EBCC09572DBBBC3F001CD63C /* Weekdays.swift */,
 				EB5D52D32DB02B0F006802C9 /* Main.storyboard */,
 				EB5D52D62DB02B13006802C9 /* Assets.xcassets */,
 				EB5D52D82DB02B13006802C9 /* LaunchScreen.storyboard */,
@@ -160,6 +184,39 @@
 				EB5D530E2DB038C6006802C9 /* SupplementaryView.swift */,
 			);
 			path = "Work applications";
+			sourceTree = "<group>";
+		};
+		EBCC093F2DBBB8E7001CD63C /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				EBCC09412DBBB91E001CD63C /* StoreError */,
+				EBCC09402DBBB910001CD63C /* Converters */,
+				EBCC09422DBBB953001CD63C /* Tracker.xcdatamodeld */,
+				EBCC09452DBBBA73001CD63C /* TrackerCategoryStore.swift */,
+				EBCC09472DBBBA91001CD63C /* TrackerRecordStore.swift */,
+				EBCC09492DBBBB03001CD63C /* TrackerStore.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		EBCC09402DBBB910001CD63C /* Converters */ = {
+			isa = PBXGroup;
+			children = (
+				EBCC094B2DBBBB27001CD63C /* Bit.swift */,
+				EBCC094D2DBBBB3E001CD63C /* ScheduleConvertor.swift */,
+				EBCC094F2DBBBB5D001CD63C /* UIColorMarshalling.swift */,
+			);
+			path = Converters;
+			sourceTree = "<group>";
+		};
+		EBCC09412DBBB91E001CD63C /* StoreError */ = {
+			isa = PBXGroup;
+			children = (
+				EBCC09512DBBBB7B001CD63C /* TrackerStoreError.swift */,
+				EBCC09532DBBBB90001CD63C /* CategoryStoreError.swift */,
+				EBCC09552DBBBBA5001CD63C /* TrackerRecordStoreError.swift */,
+			);
+			path = StoreError;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -299,10 +356,21 @@
 				EB5D52CE2DB02B0F006802C9 /* AppDelegate.swift in Sources */,
 				EB5D53052DB037B3006802C9 /* TabBarController.swift in Sources */,
 				EB5D530B2DB03833006802C9 /* MakeTrackerVC.swift in Sources */,
+				EBCC09562DBBBBA5001CD63C /* TrackerRecordStoreError.swift in Sources */,
+				EBCC094A2DBBBB03001CD63C /* TrackerStore.swift in Sources */,
+				EBCC094C2DBBBB27001CD63C /* Bit.swift in Sources */,
+				EBCC09502DBBBB5D001CD63C /* UIColorMarshalling.swift in Sources */,
+				EBCC09462DBBBA73001CD63C /* TrackerCategoryStore.swift in Sources */,
 				EB5D530F2DB038C6006802C9 /* SupplementaryView.swift in Sources */,
+				EBCC09442DBBB953001CD63C /* Tracker.xcdatamodeld in Sources */,
+				EBCC09542DBBBB90001CD63C /* CategoryStoreError.swift in Sources */,
+				EBCC09582DBBBC3F001CD63C /* Weekdays.swift in Sources */,
 				EB5D53032DB03765006802C9 /* TrackerCell.swift in Sources */,
+				EBCC09482DBBBA91001CD63C /* TrackerRecordStore.swift in Sources */,
 				EB5D530D2DB038A3006802C9 /* scheduleVC.swift in Sources */,
 				EB5D53092DB0380E006802C9 /* StatisticsViewController.swift in Sources */,
+				EBCC094E2DBBBB3E001CD63C /* ScheduleConvertor.swift in Sources */,
+				EBCC09522DBBBB7B001CD63C /* TrackerStoreError.swift in Sources */,
 				EB5D53072DB037E3006802C9 /* SettingsOfViewController.swift in Sources */,
 				EB5D52D02DB02B0F006802C9 /* SceneDelegate.swift in Sources */,
 			);
@@ -647,6 +715,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		EBCC09422DBBB953001CD63C /* Tracker.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				EBCC09432DBBB953001CD63C /* Tracker.xcdatamodel */,
+			);
+			currentVersion = EBCC09432DBBB953001CD63C /* Tracker.xcdatamodel */;
+			path = Tracker.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = EB5D52C22DB02B0F006802C9 /* Project object */;
 }

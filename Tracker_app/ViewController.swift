@@ -123,33 +123,33 @@ final class TrackersViewController: UIViewController, TrackerSettingsViewControl
     
     private func updateVisibleTrackers() {
         let calendar = Calendar.current
-        let weekday = calendar.component(.weekday, from: currentDate) - 1
+        let weekdayIndex = calendar.component(.weekday, from: currentDate) - 1
         var filteredTrackers = [Tracker]()
         
         for category in categories {
             for tracker in category.trackers {
-                if let schedule = tracker.calendar {
-                    if schedule.contains(where: { weekdays.firstIndex(of: $0.rawValue) == weekday }) {
+                if !tracker.calendar.isEmpty { // Проверяем привычки (по расписанию)
+                    // Проверяем, есть ли текущий день недели в расписании трекера
+                    let currentWeekday = WeekDays.allCases[weekdayIndex]
+                    if tracker.calendar.contains(currentWeekday) {
                         filteredTrackers.append(tracker)
                     }
-                } else if let date = tracker.date, calendar.isDate(date, inSameDayAs: currentDate) {
+                } else if let date = tracker.date, // Проверяем нерегулярные события (по дате)
+                          calendar.isDate(date, inSameDayAs: currentDate) {
                     filteredTrackers.append(tracker)
                 }
             }
         }
         
-      
         visibleCategories = filteredTrackers.isEmpty ? [] : [
             TrackerCategory(category: "Активные трекеры", trackers: filteredTrackers)
         ]
-        
         
         collectionView.reloadData()
         collectionView.isHidden = visibleCategories.isEmpty
         placeholder.isHidden = !visibleCategories.isEmpty
         placeholderLabel.isHidden = !visibleCategories.isEmpty
     }
-    
     
     
     private func isTrackerCompleted(trackerId: UUID) -> Bool {

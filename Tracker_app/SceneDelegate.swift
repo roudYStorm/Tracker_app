@@ -34,4 +34,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 }
 
+// посмотри пожалуйста файл прочитай пожалуйста
 

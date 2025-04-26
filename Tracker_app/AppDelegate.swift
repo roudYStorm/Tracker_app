@@ -71,5 +71,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             """)
         }
     }
+    
 }
+
+// посмотри пожалуйста файл прочитай пожалуйста
 

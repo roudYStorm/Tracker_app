@@ -1,12 +1,19 @@
 import UIKit
 
+
+enum TrackerType {
+    case habit       // привычка (имеет расписание)
+    case event       // разовое событие (имеет дату, но не имеет расписания)
+}
+
 struct Tracker {
     let id: UUID
     let name: String
     let color: UIColor
     let emoji: String
-    let calendar: [Weekday]?
+    let calendar: Set<WeekDays>
     let date: Date?
+    let type: TrackerType
 }
 struct TrackerCategory {
     let category: String
