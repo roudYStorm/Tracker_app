@@ -2,7 +2,7 @@ import Foundation
 
 enum WeekDays: Int, CaseIterable {
     case monday = 1
-    case tueseday
+    case tuesday
     case wednesday
     case thursday
     case friday
@@ -13,7 +13,7 @@ enum WeekDays: Int, CaseIterable {
         switch self {
         case .monday:
             return "Понедельник"
-        case .tueseday:
+        case .tuesday:
             return "Вторник"
         case .wednesday:
             return "Среда"
@@ -31,7 +31,7 @@ enum WeekDays: Int, CaseIterable {
         switch self {
         case .monday:
             return "Пн"
-        case .tueseday:
+        case .tuesday:
             return "Вт"
         case .wednesday:
             return "Ср"
