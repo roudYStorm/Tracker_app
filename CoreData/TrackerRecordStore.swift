@@ -52,7 +52,7 @@ final class TrackerRecordStore: NSObject {
             fatalError("Не удалось получить AppDelegate")
         }
         
-        let context = appDelegate.dataStorageContainer.viewContext
+        let context = appDelegate.persistentContainer.viewContext
         self.init(context: context)
     }
     

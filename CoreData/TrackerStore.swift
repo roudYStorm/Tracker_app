@@ -45,7 +45,7 @@ final class TrackerStore: NSObject {
             fatalError("Не удалось получить AppDelegate")
         }
         
-        let context = appDelegate.dataStorageContainer.viewContext
+        let context = appDelegate.persistentContainer.viewContext
         self.init(context: context)
     }
     
@@ -74,7 +74,7 @@ final class TrackerStore: NSObject {
         trackerCoreData.title = tracker.name
         trackerCoreData.color = uiColorMarshalling.hexString(from: tracker.color)
         trackerCoreData.emoji = tracker.emoji
-        trackerCoreData.schedule = scheduleConvertor.convertScheduleToUInt16(from: tracker.calendar)
+        trackerCoreData.schedule = scheduleConvertor.convertScheduleToUInt16(from: tracker.schedule)
         
         if context.hasChanges {
             try context.save()
