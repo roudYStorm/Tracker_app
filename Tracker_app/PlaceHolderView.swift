@@ -20,7 +20,7 @@ final class PlaceHolderView: UIView {
     // MARK: - Public Methods
     
     func setupNoTrackersState() {
-        imageView.image = UIImage(named: "starIcon")
+        imageView.image = UIImage(named: "star")
         label.text = "Что будем отслеживать?"
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center

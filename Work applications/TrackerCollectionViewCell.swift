@@ -72,7 +72,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             counterDelegate?.increaseTrackerCounter(id: id, date: currentDay)
             daysCount = counterDelegate?.calculateTimesTrackerWasCompleted(id: id) ?? daysCount
         } else {
-            addButton.setImage(UIImage(named: "addIcon"), for: .normal)
+            addButton.setImage(UIImage(named: "plus"), for: .normal)
             addButton.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
             addButton.backgroundColor = color
             guard let id = trackerInfo?.id,
@@ -114,7 +114,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             addButton.setImage(UIImage(named: "done"), for: .normal)
             addButton.backgroundColor = color?.withAlphaComponent(0.3)
         } else {
-            addButton.setImage(UIImage(named: "addIcon"), for: .normal)
+            addButton.setImage(UIImage(named: "plus"), for: .normal)
             addButton.backgroundColor = color
         }
         addButton.layer.cornerRadius = 16

@@ -14,11 +14,11 @@ class TabBarController: UITabBarController {
         viewControllers = [
             generateVC(viewController: navigationViewController,
                        title: "Трекеры",
-                       image: UIImage(named: "trackerIcon")
+                       image: UIImage(named: "statisticIcon")
                       ),
             generateVC(viewController: StatisticViewController(),
                        title: "Статистика",
-                       image: UIImage(named: "statisticIcon")
+                       image: UIImage(named: "TrackersTabBarIcon")
                       )
         ]
     }

@@ -13,7 +13,7 @@ class TrackerViewController: UIViewController {
     // MARK: - Subviews
     private lazy var addTrackerButton: UIButton = {
         let button = UIButton()
-        if let imageButton = UIImage(named: "addIcon") {
+        if let imageButton = UIImage(named: "plus") {
             button.setImage(imageButton, for: .normal)
             button.addTarget(self, action: #selector(didTapPlusButton), for: .touchUpInside)
         }

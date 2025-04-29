@@ -55,6 +55,7 @@
 		EBCC098F2DC159C3001CD63C /* PreviewVCExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCC098E2DC159C3001CD63C /* PreviewVCExtention.swift */; };
 		EBCC09912DC159D5001CD63C /* PlaceHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCC09902DC159D5001CD63C /* PlaceHolderView.swift */; };
 		EBCC09932DC15A9E001CD63C /* ExtentionUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCC09922DC15A9E001CD63C /* ExtentionUIColor.swift */; };
+		EBCC09952DC15EAF001CD63C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBCC09942DC15EAF001CD63C /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +128,7 @@
 		EBCC098E2DC159C3001CD63C /* PreviewVCExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewVCExtention.swift; sourceTree = "<group>"; };
 		EBCC09902DC159D5001CD63C /* PlaceHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceHolderView.swift; sourceTree = "<group>"; };
 		EBCC09922DC15A9E001CD63C /* ExtentionUIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtentionUIColor.swift; sourceTree = "<group>"; };
+		EBCC09942DC15EAF001CD63C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -224,6 +226,7 @@
 			children = (
 				EB5D53022DB03765006802C9 /* TrackerCollectionViewCell.swift */,
 				EB5D52D12DB02B0F006802C9 /* ViewController.swift */,
+				EBCC09942DC15EAF001CD63C /* Main.storyboard */,
 				EB5D53082DB0380E006802C9 /* StatisticsViewController.swift */,
 				EBCC096A2DC156A4001CD63C /* TrackerCounterDelegate.swift */,
 				EBCC096C2DC156C0001CD63C /* HeaderCollectionReusableView.swift */,
@@ -404,6 +407,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBCC09952DC15EAF001CD63C /* Main.storyboard in Resources */,
 				EB5D52DA2DB02B13006802C9 /* LaunchScreen.storyboard in Resources */,
 				EB5D52D72DB02B13006802C9 /* Assets.xcassets in Resources */,
 			);
