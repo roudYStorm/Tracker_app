@@ -8,7 +8,7 @@ struct TrackerViewControllerPreview: PreviewProvider {
 }
 
 // MARK: - TrackerVC
-class TrackerViewController: UIViewController {
+final class TrackerViewController: UIViewController, ViewConfigurable {
     
     // MARK: - Subviews
     private lazy var addTrackerButton: UIButton = {
@@ -83,16 +83,31 @@ class TrackerViewController: UIViewController {
     }
     // MARK: - setup View and Constraits
     private func setupView() {
-        let subViews = [customNavigationBar, collectionView]
-        subViews.forEach { view.addSubview($0) }
         setupNavigationBar()
         setupCollectionView()
-        createNewCategory()
-        
+        configureView()
         categories = trackerCategoryStore.categories
         completedTrackers = trackerRecordStore.completedTrackers
         updateCollectionAccordingToDate()
-        
+    }
+    
+    func addSubviews() {
+        let subViews = [customNavigationBar, collectionView]
+        subViews.forEach { view.addSubview($0) }
+    }
+    
+    func addConstraints() {
+        NSLayoutConstraint.activate([
+            customNavigationBar.topAnchor.constraint(equalTo: view.topAnchor),
+            customNavigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            customNavigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            customNavigationBar.heightAnchor.constraint(equalToConstant: 182),
+            
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 182),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
     
     // MARK: - Custom Navigation Bar
@@ -114,17 +129,7 @@ class TrackerViewController: UIViewController {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.placeholder = "Поиск"
         navigationItem.searchController = searchController
-        setupNavigationBarConstraints()
         
-    }
-    
-    private func setupNavigationBarConstraints() {
-        NSLayoutConstraint.activate([
-            customNavigationBar.topAnchor.constraint(equalTo: view.topAnchor),
-            customNavigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            customNavigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            customNavigationBar.heightAnchor.constraint(equalToConstant: 182) // Высота с учетом всех элементов
-        ])
     }
     
     // MARK: setupCollectionView
@@ -143,18 +148,10 @@ class TrackerViewController: UIViewController {
         )
         collectionView.backgroundColor = .white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(collectionView)
-        
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 182),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
     }
     
-    private func createNewCategory() {
-        try? trackerCategoryStore.addNewCategory(name: "Важное")
+    private func createNewCategory(categoryName: String) {
+        try? trackerCategoryStore.addNewCategory(name: categoryName)
     }
     
     private func showPlaceHolder() {

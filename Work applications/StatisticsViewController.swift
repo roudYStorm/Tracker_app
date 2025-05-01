@@ -8,7 +8,7 @@ struct StatisticViewControllerPreview: PreviewProvider {
 }
 
 // MARK: - StatisticVC
-class StatisticViewController: UIViewController {
+final class StatisticViewController: UIViewController, ViewConfigurable {
     // MARK: - Subviews
     private let titleLable: UILabel = {
         let labe = UILabel()
@@ -41,16 +41,15 @@ class StatisticViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setupView()
-        setConstraints()
+        configureView()
     }
-    // MARK: - setup View and Constraints
-    private func setupView() {
+    // MARK: - ViewConfigurable Methods
+    func addSubviews() {
         let subViews = [titleLable,image,questionLable]
         subViews.forEach { view.addSubview($0) }
     }
     
-    private func setConstraints() {
+    func addConstraints() {
         NSLayoutConstraint.activate([
             titleLable.topAnchor.constraint(equalTo: view.topAnchor, constant: 88),
             titleLable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),

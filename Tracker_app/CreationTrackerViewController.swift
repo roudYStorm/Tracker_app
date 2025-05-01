@@ -20,13 +20,15 @@ class CreationTrackerViewController: UIViewController {
     weak var creationDelegate: TrackerCreationDelegate?
     weak var configureUIDelegate: ConfigureUIForTrackerCreationProtocol?
     
+    var closeCreatingTrackerViewController: (() -> ())?
+    
     var selectedWeekDays: Set<WeekDays> = [] {
         didSet {
             configureUIDelegate?.checkIfSaveButtonCanBePressed()
         }
     }
     
-    var trackerCategory = "Важное" {
+    var trackerCategory: TrackerCategory? {
         didSet {
             configureUIDelegate?.checkIfSaveButtonCanBePressed()
         }
@@ -104,13 +106,15 @@ class CreationTrackerViewController: UIViewController {
     @objc
     private func cancelButtonPressed() {
         dismiss(animated: true)
+        closeCreatingTrackerViewController?()
     }
     
     @objc
     func saveButtonPressed() {
         guard let name = trackerName,
               let color = selectedColor,
-              let emoji = selectedEmoji else { return }
+              let emoji = selectedEmoji,
+              let categoryTitle = trackerCategory?.title else { return }
         let tracker = Tracker(
             name: name,
             color: color,
@@ -119,8 +123,9 @@ class CreationTrackerViewController: UIViewController {
             state: .Habit
         )
         
-        creationDelegate?.createTracker(tracker: tracker, category: trackerCategory)
+        creationDelegate?.createTracker(tracker: tracker, category: categoryTitle)
         dismiss(animated: true)
+        closeCreatingTrackerViewController?()
     }
     
     // MARK: - Private Methods
@@ -280,7 +285,7 @@ extension CreationTrackerViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiCell.identifier, for: indexPath) as? EmojiCell else {
             return UICollectionViewCell()
         }
-        cell.label.text = allEmojies[indexPath.row]
+        cell.emojiLabel.text = allEmojies[indexPath.row]
         return cell
     }
 }
@@ -336,7 +341,7 @@ extension CreationTrackerViewController: UICollectionViewDelegateFlowLayout {
                 collectionView.deselectItem(at: indexPath, animated: true)
                 return
             }
-            guard let emoji = cell.label.text else { return }
+            guard let emoji = cell.emojiLabel.text else { return }
             selectedEmoji = emoji
         } else if indexPath.section == Sections.color.rawValue {
             guard let cell = collectionView.cellForItem(at: indexPath) as? ColorCell else {
@@ -371,10 +376,29 @@ extension CreationTrackerViewController: SaveNameTrackerDelegate {
     }
 }
 
+// MARK: - CategorySelectProtocol
+extension CreationTrackerViewController: CategoryWasSelectedProtocol {
+    func categoryWasSelected(category: TrackerCategory) {
+        trackerCategory = category
+        
+        if let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 1)) as? ButtonsCell  {
+            cell.updateSubtitleLabel(
+                forCellAt: IndexPath(row: 0, section: 0),
+                text: trackerCategory?.title ?? "")
+        }
+    }
+}
+
 //MARK: - ShowCategoriesDelegate
 extension CreationTrackerViewController: ShowCategoriesDelegate {
-    func showCategoriesViewController() {
-        //TODO: добавить функционал создания категорий
+    func showCategoriesViewController(viewController: CategoryViewController) {
+        
+        if let trackerCategory = trackerCategory {
+            viewController.categoriesViewModel.selectedCategory = CategoryViewModel(title: trackerCategory.title, trackers: trackerCategory.trackers)
+        }
+        viewController.categoriesViewModel.categoryWasSelectedDelegate = self
+        
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
