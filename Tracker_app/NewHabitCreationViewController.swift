@@ -37,7 +37,7 @@ final class NewHabitCreationViewController: CreationTrackerViewController {
 extension NewHabitCreationViewController: ShowScheduleDelegate {
     
     // MARK: - Public Methods
-    func showShowScheduleViewController(viewController: ScheduleViewController) {
+    func showScheduleViewController(viewController: ScheduleViewController) {
         viewController.sheduleDelegate = self
         viewController.selectedDays = selectedWeekDays
         navigationController?.pushViewController(viewController, animated: true)
@@ -71,6 +71,7 @@ extension NewHabitCreationViewController: ConfigureUIForTrackerCreationProtocol 
     func configureButtonsCell(cell: ButtonsCell) {
         cell.prepareForReuse()
         cell.scheduleDelegate = self
+        cell.categoriesDelegate = self
         cell.state = .Habit
     }
     

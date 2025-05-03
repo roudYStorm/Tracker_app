@@ -1,6 +1,6 @@
 import UIKit
 
-class TabBarController: UITabBarController {
+final class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -14,11 +14,11 @@ class TabBarController: UITabBarController {
         viewControllers = [
             generateVC(viewController: navigationViewController,
                        title: "Трекеры",
-                       image: UIImage(named: "statisticIcon")
+                       image: UIImage(named: "trackerIcon")
                       ),
             generateVC(viewController: StatisticViewController(),
                        title: "Статистика",
-                       image: UIImage(named: "TrackersTabBarIcon")
+                       image: UIImage(named: "statisticIcon")
                       )
         ]
     }
