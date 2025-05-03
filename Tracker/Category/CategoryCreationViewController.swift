@@ -6,7 +6,8 @@ final class CategoryCreationViewController: UIViewController, ViewConfigurable {
     var saveButtonCanBePressed: Bool? {
         didSet {
             let isEnabled = saveButtonCanBePressed ?? false
-            saveButton.backgroundColor = isEnabled ? #colorLiteral(red: 0.1352768838, green: 0.1420838535, blue: 0.1778985262, alpha: 1) : #colorLiteral(red: 0.6823529412, green: 0.6862745098, blue: 0.7058823529, alpha: 1)
+            saveButton.backgroundColor = isEnabled ? .buttonColor : #colorLiteral(red: 0.6823529412, green: 0.6862745098, blue: 0.7058823529, alpha: 1)
+            saveButton.titleLabel?.textColor = .textColor
             saveButton.isEnabled = isEnabled
         }
     }
@@ -14,7 +15,7 @@ final class CategoryCreationViewController: UIViewController, ViewConfigurable {
     // MARK: - Private Properties
     private lazy var saveButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("done", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.titleLabel?.textColor = .white
         button.backgroundColor = #colorLiteral(red: 0.6823529412, green: 0.6862745098, blue: 0.7058823529, alpha: 1)
@@ -28,7 +29,7 @@ final class CategoryCreationViewController: UIViewController, ViewConfigurable {
         let textField = UITextField()
         textField.layer.cornerRadius = 16
         textField.backgroundColor = .greyColorCell
-        textField.placeholder = "Введите название категории"
+        textField.placeholder = NSLocalizedString("category.enterTittle", comment: "")
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         textField.setLeftPaddingPoints(12)
         textField.clearButtonMode = .whileEditing
@@ -43,9 +44,9 @@ final class CategoryCreationViewController: UIViewController, ViewConfigurable {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Новая категория"
+        self.title = NSLocalizedString("category.new", comment: "")
         navigationItem.hidesBackButton = true
-        view.backgroundColor = .white
+        view.backgroundColor = .backgroudColor
         
         configureView()
         setupHideKeyboardGesture()

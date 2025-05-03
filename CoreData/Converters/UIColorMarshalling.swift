@@ -24,5 +24,14 @@ final class UIColorMarshalling {
             alpha: CGFloat(1.0)
         )
     }
+    
+    func isEqual(color1: UIColor, to color2: UIColor) -> Bool {
+        let hex1 = hexString(from: color1)
+        let hex2 = hexString(from: color2)
+        if hex1 == hex2 {
+            return true
+        }
+        return false
+    }
 }
 

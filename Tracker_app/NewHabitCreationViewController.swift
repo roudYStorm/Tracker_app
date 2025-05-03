@@ -17,7 +17,7 @@ final class NewHabitCreationViewController: CreationTrackerViewController {
         var scheduleSubtext = String()
         
         if selectedWeekDays == weekSet {
-            scheduleSubtext = "Каждый день"
+            scheduleSubtext = NSLocalizedString("weekdays.all", comment: "")
         } else if !selectedWeekDays.isEmpty {
             selectedWeekDays.sorted {
                 $0.rawValue < $1.rawValue
@@ -72,12 +72,12 @@ extension NewHabitCreationViewController: ConfigureUIForTrackerCreationProtocol 
         cell.prepareForReuse()
         cell.scheduleDelegate = self
         cell.categoriesDelegate = self
-        cell.state = .Habit
+        cell.state = .habit
     }
     
     func setupBackground() {
-        self.title = "Новая привычка"
-        view.backgroundColor = .white
+        self.title = NSLocalizedString("habit.new", comment: "")
+        view.backgroundColor = .backgroudColor
         navigationItem.hidesBackButton = true
     }
     

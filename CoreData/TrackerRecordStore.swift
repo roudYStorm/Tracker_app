@@ -10,6 +10,17 @@ final class TrackerRecordStore: NSObject {
     // MARK: - Public Properties
     weak var delegate: TrackerRecordStoreDelegate?
     
+    var totalTrackersCount: Int {
+        let request = TrackerCoreData.fetchRequest()
+        do {
+            let trackers = try context.fetch(request)
+            return trackers.count
+        } catch {
+            print("Error fetching trackers: \(error)")
+            return 0
+        }
+    }
+    
     var completedTrackers: [TrackerRecord] {
         guard
             let objects = self.fetchedResultsController.fetchedObjects
@@ -22,6 +33,80 @@ final class TrackerRecordStore: NSObject {
             }
         } catch { return [] }
         return result
+    }
+    
+    var bestPeriod: Int {
+        guard let objects = self.fetchedResultsController.fetchedObjects else { return 0 }
+        
+        var currentStreak = 0
+        var longestStreak = 0
+        var previousDate: Date?
+        
+        for record in objects {
+            guard let trackerRecord = try? self.convertTrackerRecordFromCoreData(from: record) else { continue }
+            let recordDate = trackerRecord.date
+            
+            if let previous = previousDate, Calendar.current.isDate(recordDate, inSameDayAs: previous.addingTimeInterval(86400)) {
+                // Если текущая дата идет подряд
+                currentStreak += 1
+            } else {
+                // Если последовательность прервалась
+                longestStreak = max(longestStreak, currentStreak)
+                currentStreak = 1 // Начинаем новую последовательность
+            }
+            previousDate = recordDate
+        }
+        
+        // Проверяем последнюю последовательность
+        return max(longestStreak, currentStreak)
+    }
+    
+    var perfectDays: Int {
+        guard let objects = self.fetchedResultsController.fetchedObjects else { return 0 }
+        
+        var dayRecords: [Date: [TrackerRecord]] = [:]
+        
+        // Собираем трекеры по датам
+        for record in objects {
+            guard let trackerRecord = try? self.convertTrackerRecordFromCoreData(from: record) else { continue }
+            let recordDate = Calendar.current.startOfDay(for: trackerRecord.date)
+            
+            if dayRecords[recordDate] == nil {
+                dayRecords[recordDate] = []
+            }
+            dayRecords[recordDate]?.append(trackerRecord)
+        }
+        
+        // Проверяем дни, когда все трекеры выполнены
+        var perfectDayCount = 0
+        for (_, records) in dayRecords {
+            if records.count == totalTrackersCount { // totalTrackersCount - общее количество трекеров
+                perfectDayCount += 1
+            }
+        }
+        
+        return perfectDayCount
+    }
+    
+    var averageTrackersPerDay: Double {
+        guard let objects = self.fetchedResultsController.fetchedObjects else { return 0.0 }
+        
+        var dayRecords: [Date: Int] = [:]
+        
+        // Считаем количество трекеров по дням
+        for record in objects {
+            guard let trackerRecord = try? self.convertTrackerRecordFromCoreData(from: record) else { continue }
+            let recordDate = Calendar.current.startOfDay(for: trackerRecord.date)
+            
+            if dayRecords[recordDate] == nil {
+                dayRecords[recordDate] = 0
+            }
+            dayRecords[recordDate]? += 1
+        }
+        
+        // Рассчитываем среднее количество трекеров за день
+        let totalTrackersCompleted = dayRecords.values.reduce(0, +)
+        return Double(totalTrackersCompleted) / Double(dayRecords.count)
     }
     
     // MARK: - Private Properties
@@ -75,7 +160,10 @@ final class TrackerRecordStore: NSObject {
         trackerRecordCoreData.trackerId = trackerId
         trackerRecordCoreData.date = date
         
-        try context.save()
+        if context.hasChanges {
+            try context.save()
+            NotificationCenter.default.post(name: .dataDidChange, object: nil)
+        }
     }
     
     func deleteRecord(trackerId: UUID, date: Date) throws {
@@ -85,7 +173,20 @@ final class TrackerRecordStore: NSObject {
         } catch {
             throw TrackerRecordStoreError.fetchTrackerRecordError
         }
-        try context.save()
+        if context.hasChanges {
+            try context.save()
+            NotificationCenter.default.post(name: .dataDidChange, object: nil)
+        }
+    }
+    
+    func calculateCompletedTrackers() throws -> Int {
+        let request = TrackerRecordCoreData.fetchRequest()
+        do {
+            let count = try context.count(for: request)
+            return count
+        } catch {
+            throw TrackerRecordStoreError.fetchTrackerRecordError
+        }
     }
     
     // MARK: - Private Methods
@@ -128,5 +229,4 @@ extension TrackerRecordStore: NSFetchedResultsControllerDelegate {
         delegate?.recordUpdate()
     }
 }
-
 

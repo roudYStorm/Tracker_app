@@ -25,7 +25,8 @@ final class NewEventCreationViewController: CreationTrackerViewController {
             color: color,
             emoji: emoji,
             schedule: weekSet,
-            state: .Event
+            state: .event,
+            isPinned: false
         )
         
         creationDelegate?.createTracker(tracker: tracker, category: categoryTitle)
@@ -40,12 +41,12 @@ extension NewEventCreationViewController: ConfigureUIForTrackerCreationProtocol 
     func configureButtonsCell(cell: ButtonsCell) {
         cell.prepareForReuse()
         cell.categoriesDelegate = self
-        cell.state = .Event
+        cell.state = .event
     }
     
     func setupBackground() {
-        self.title = "Новое нерегулярное событие"
-        view.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        self.title = NSLocalizedString("event.new", comment: "")
+        view.backgroundColor = .backgroudColor
         navigationItem.hidesBackButton = true
     }
     

@@ -39,10 +39,15 @@ final class ButtonTableViewCell: UITableViewCell, ViewConfigurable {
         if text.count > 0 {
             subtitleLabel.text = text
             stackView.addArrangedSubview(subtitleLabel)
+            subtitleLabel.textColor = .subtitleLabelColor
         } else {
             subtitleLabel.text = ""
             stackView.removeArrangedSubview(subtitleLabel)
         }
+    }
+    
+    func setTitleLabelText(with string: String) {
+        titleLabel.text = NSLocalizedString("\(string)", comment: "")
     }
     
     // MARK: - Private Methods
