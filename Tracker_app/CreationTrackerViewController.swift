@@ -117,7 +117,7 @@ class CreationTrackerViewController: UIViewController {
             color: color,
             emoji: emoji,
             schedule: selectedWeekDays,
-            state: .habit,
+            state: .Habit,
             isPinned: false
         )
         

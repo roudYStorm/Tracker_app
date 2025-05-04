@@ -72,7 +72,7 @@ extension NewHabitCreationViewController: ConfigureUIForTrackerCreationProtocol 
         cell.prepareForReuse()
         cell.scheduleDelegate = self
         cell.categoriesDelegate = self
-        cell.state = .habit
+        cell.state = .Habit
     }
     
     func setupBackground() {

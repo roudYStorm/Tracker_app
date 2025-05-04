@@ -75,7 +75,6 @@ final class TrackerCategoryStore: NSObject {
         if count == 0 && name != "" {
             let categoryCoreData = TrackerCategoryCoreData(context: context)
             categoryCoreData.title = name
-            categoryCoreData.trackers = NSSet()
             
             try context.save()
         }
@@ -118,7 +117,7 @@ final class TrackerCategoryStore: NSObject {
                     color: color,
                     emoji: emoji,
                     schedule: schedule,
-                    state: .habit,
+                    state: .Habit,
                     isPinned: trackerData.isPinned
                 )
                 trackers.append(tracker)

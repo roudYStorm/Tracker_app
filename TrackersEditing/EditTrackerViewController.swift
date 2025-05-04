@@ -292,7 +292,7 @@ extension EditTrackerViewController: UICollectionViewDataSource {
         cell.prepareForReuse()
         cell.scheduleDelegate = self
         cell.categoriesDelegate = self
-        cell.state = .habit
+        cell.state = .Habit
         cell.scheduleSubText = viewModel.convertSelectedDaysToString()
         cell.categorySubText = viewModel.trackerInfo.category?.title
     }
