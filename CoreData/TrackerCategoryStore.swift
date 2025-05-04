@@ -109,7 +109,7 @@ final class TrackerCategoryStore: NSObject {
                 let emoji = trackerData.emoji,
                 let colorString = trackerData.color
             {
-                let color = colorConvertor.color(from: colorString)
+                let color = colorConvertor.color(from: colorString as! String)
                 let schedule = scheduleConvertor.getSchedule(from: trackerData.schedule)
                 let tracker = Tracker(
                     id: id,
