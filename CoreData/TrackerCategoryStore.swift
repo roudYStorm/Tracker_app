@@ -107,9 +107,9 @@ final class TrackerCategoryStore: NSObject {
                 let id = trackerData.trackerId,
                 let name = trackerData.title,
                 let emoji = trackerData.emoji,
-                let colorString = trackerData.color
+                let color = trackerData.color as? UIColor
             {
-                let color = colorConvertor.color(from: colorString as! String)
+                
                 let schedule = scheduleConvertor.getSchedule(from: trackerData.schedule)
                 let tracker = Tracker(
                     id: id,
@@ -126,55 +126,55 @@ final class TrackerCategoryStore: NSObject {
         return TrackerCategory(title: title, trackers: trackers)
     }
 }
-
-//MARK: - NSFetchedResultsControllerDelegate
-extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        insertedIndexes = IndexSet()
-        deletedIndexes = IndexSet()
-        updatedIndexes = IndexSet()
-    }
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard
-            let insertedIndexes,
-            let deletedIndexes,
-            let updatedIndexes
-        else {
-            return
+    //MARK: - NSFetchedResultsControllerDelegate
+    extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
+        func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+            insertedIndexes = IndexSet()
+            deletedIndexes = IndexSet()
+            updatedIndexes = IndexSet()
         }
         
-        delegate?.newCategoryAdded(
-            insertedIndexes: insertedIndexes,
-            deletedIndexes: deletedIndexes,
-            updatedIndexes: updatedIndexes
-        )
+        func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+            guard
+                let insertedIndexes,
+                let deletedIndexes,
+                let updatedIndexes
+            else {
+                return
+            }
+            
+            delegate?.newCategoryAdded(
+                insertedIndexes: insertedIndexes,
+                deletedIndexes: deletedIndexes,
+                updatedIndexes: updatedIndexes
+            )
+            
+            self.insertedIndexes = nil
+            self.deletedIndexes = nil
+            self.updatedIndexes = nil
+        }
         
-        self.insertedIndexes = nil
-        self.deletedIndexes = nil
-        self.updatedIndexes = nil
-    }
-    
-    func controller(
-        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
-        didChange anObject: Any,
-        at indexPath: IndexPath?,
-        for type: NSFetchedResultsChangeType,
-        newIndexPath: IndexPath?)
-    {
-        switch type {
-        case .insert:
-            guard let indexPath = newIndexPath else { fatalError() }
-            insertedIndexes?.insert(indexPath.item)
-        case .delete:
-            guard let indexPath = newIndexPath else { fatalError() }
-            deletedIndexes?.insert(indexPath.item)
-        case .update:
-            guard let indexPath = newIndexPath else { fatalError() }
-            updatedIndexes?.insert(indexPath.item)
-        default:
-            fatalError()
+        func controller(
+            _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+            didChange anObject: Any,
+            at indexPath: IndexPath?,
+            for type: NSFetchedResultsChangeType,
+            newIndexPath: IndexPath?)
+        {
+            switch type {
+            case .insert:
+                guard let indexPath = newIndexPath else { fatalError() }
+                insertedIndexes?.insert(indexPath.item)
+            case .delete:
+                guard let indexPath = newIndexPath else { fatalError() }
+                deletedIndexes?.insert(indexPath.item)
+            case .update:
+                guard let indexPath = newIndexPath else { fatalError() }
+                updatedIndexes?.insert(indexPath.item)
+            default:
+                fatalError()
+            }
         }
     }
-}
+    
 

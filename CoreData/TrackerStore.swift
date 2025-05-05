@@ -63,7 +63,7 @@ final class TrackerStore: NSObject {
         
         trackerCoreData.trackerId = tracker.id
         trackerCoreData.title = tracker.name
-        trackerCoreData.color = uiColorMarshalling.hexString(from: tracker.color)
+        trackerCoreData.color = tracker.color
         trackerCoreData.emoji = tracker.emoji
         trackerCoreData.schedule = scheduleConvertor.convertScheduleToUInt16(from: tracker.schedule)
         trackerCoreData.isPinned = tracker.isPinned
@@ -95,7 +95,7 @@ final class TrackerStore: NSObject {
             let categoryData = try trackerCategoryStore.fetchCategory(name: category.title)
             trackerCoreData.title = tracker.name
             trackerCoreData.emoji = tracker.emoji
-            trackerCoreData.color = uiColorMarshalling.hexString(from: tracker.color)
+            trackerCoreData.color = tracker.color
             trackerCoreData.schedule = scheduleConvertor.convertScheduleToUInt16(from: tracker.schedule)
             trackerCoreData.category = categoryData
             if context.hasChanges {
