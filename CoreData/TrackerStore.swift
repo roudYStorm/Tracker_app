@@ -6,11 +6,7 @@ protocol TrackerStoreDelegate: AnyObject {
 }
 
 final class TrackerStore: NSObject {
-    
-    // MARK: - Public Properties
     weak var delegate: TrackerStoreDelegate?
-    
-    // MARK: - Private Properties
     
     private let context: NSManagedObjectContext
     private var insertedIndexes: [IndexPath]?
@@ -39,7 +35,6 @@ final class TrackerStore: NSObject {
         return fetchedResultsController
     }()
     
-    // MARK: - Initializers
     convenience override init() {
         guard let appDelegate = (UIApplication.shared.delegate as? AppDelegate) else {
             fatalError("Не удалось получить AppDelegate")
@@ -53,12 +48,16 @@ final class TrackerStore: NSObject {
         self.context = context
     }
     
-    // MARK: - Public Methods
     func addNewTracker(tracker: Tracker, forCategory category: String) throws {
-        guard self.fetchedResultsController.fetchedObjects != nil
-        else {
-            throw CategoryStoreError.addNewTrackerError
-        }
+        
+        guard Thread.isMainThread else {
+                DispatchQueue.main.async { [weak self] in
+                    try? self?.addNewTracker(tracker: tracker, forCategory: category)
+                }
+                return
+            }
+
+        _ = self.fetchedResultsController.fetchedObjects
         
         let trackerCoreData = TrackerCoreData(context: context)
         let trackerCategoryStore = TrackerCategoryStore(context: context)
@@ -72,13 +71,16 @@ final class TrackerStore: NSObject {
         
         trackerCoreData.trackerId = tracker.id
         trackerCoreData.title = tracker.name
-        trackerCoreData.color = uiColorMarshalling.hexString(from: tracker.color)
+        trackerCoreData.color = tracker.color
         trackerCoreData.emoji = tracker.emoji
         trackerCoreData.schedule = scheduleConvertor.convertScheduleToUInt16(from: tracker.schedule)
+        trackerCoreData.isPinned = tracker.isPinned
         
         if context.hasChanges {
             try context.save()
+            NotificationCenter.default.post(name: .dataDidChange, object: nil)
         }
+        
     }
     
     func fetchTracker(trackerId: UUID) throws -> TrackerCoreData {
@@ -92,6 +94,57 @@ final class TrackerStore: NSObject {
         }
         return result
     }
+    
+    func updateTracker(tracker: Tracker, category: TrackerCategory) throws {
+        guard Thread.isMainThread else {
+                DispatchQueue.main.async { [weak self] in
+                    try? self?.updateTracker(tracker: tracker, category: category)
+                }
+                return
+            }
+        let trackerCategoryStore = TrackerCategoryStore(context: context)
+        
+        do {
+            let trackerCoreData = try fetchTracker(trackerId: tracker.id)
+            let categoryData = try trackerCategoryStore.fetchCategory(name: category.title)
+            trackerCoreData.title = tracker.name
+            trackerCoreData.emoji = tracker.emoji
+            trackerCoreData.color = tracker.color
+            trackerCoreData.schedule = scheduleConvertor.convertScheduleToUInt16(from: tracker.schedule)
+            trackerCoreData.category = categoryData
+            if context.hasChanges {
+                try context.save()
+            }
+        } catch {
+            throw TrackerStoreError.fetchingTrackerError
+        }
+    }
+    
+    func deleteTracker(tracker: Tracker) throws {
+        do {
+            let tracker = try fetchTracker(trackerId: tracker.id)
+            context.delete(tracker)
+            if context.hasChanges {
+                try context.save()
+                NotificationCenter.default.post(name: .dataDidChange, object: nil)
+            }
+        } catch {
+            throw TrackerStoreError.fetchingTrackerError
+        }
+    }
+    
+    func pinTracker(tracker: Tracker) throws {
+        let willBePinned = tracker.isPinned ? false : true
+        do {
+            let trackerCoreData = try fetchTracker(trackerId: tracker.id)
+            trackerCoreData.isPinned = willBePinned
+            if context.hasChanges {
+                try context.save()
+            }
+        } catch {
+            throw TrackerStoreError.fetchingTrackerError
+        }
+    }
 }
 
 //MARK: - NSFetchedResultsControllerDelegate
@@ -102,17 +155,9 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard
-            let insertedIndexes,
-            let deletedIndexes
-        else {
-            return
-        }
-        
-        delegate?.store(insertedIndexes: insertedIndexes, deletedIndexes: deletedIndexes)
-        
-        self.insertedIndexes?.removeAll()
-        self.deletedIndexes = nil
+        delegate?.store(insertedIndexes: insertedIndexes!, deletedIndexes: deletedIndexes!)
+        insertedIndexes?.removeAll()
+        deletedIndexes = nil
     }
     
     func controller(
@@ -120,19 +165,15 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
         didChange anObject: Any,
         at indexPath: IndexPath?,
         for type: NSFetchedResultsChangeType,
-        newIndexPath: IndexPath?
-    ) {
+        newIndexPath: IndexPath?)
+    {
         switch type {
         case .insert:
             guard let indexPath = newIndexPath else { fatalError() }
             insertedIndexes?.append(indexPath)
-        case .delete:
-            guard let indexPath = newIndexPath else { fatalError() }
-            deletedIndexes?.insert(indexPath.item)
         default:
             break
         }
     }
 }
-
 

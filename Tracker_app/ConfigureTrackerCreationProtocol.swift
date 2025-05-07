@@ -6,3 +6,4 @@ protocol ConfigureUIForTrackerCreationProtocol: AnyObject {
     func calculateTableViewHeight(width: CGFloat) -> CGSize
     func checkIfSaveButtonCanBePressed()
 }
+

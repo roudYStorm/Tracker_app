@@ -1,22 +1,23 @@
 import UIKit
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
-    
     // MARK: - Public Properties
     static let identifier = "TrackerCell"
     
     weak var counterDelegate: TrackerCounterDelegate?
     
-    let addButton = UIButton(type: .system)
-    let card = UIView()
-    let circle = UIView()
-    let emojiLabel = UILabel()
-    let titleLabel = UILabel()
-    let pinImageView = UIImageView()
-    let daysCountLabel = UILabel()
+    var deleteTrackerHandler: ((Tracker) -> ())?
+    var pinTrackerHandler: ((Tracker) -> ())?
+    var editTrackerHandler: ((TrackerInfoCell) -> ())?
     
     var color: UIColor?
-    var isPinned: Bool = false
+    
+    var isPinned: Bool = false {
+        didSet {
+            pinImageView.isHidden = !isPinned
+        }
+    }
+    
     var daysCount: Int = 0 {
         didSet {
             updateDaysCountLabel()
@@ -29,11 +30,24 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             titleLabel.text = trackerInfo?.name
             emojiLabel.text = trackerInfo?.emoji
             card.backgroundColor = trackerInfo?.color
+            
             daysCount = trackerInfo?.daysCount ?? daysCount
             color = trackerInfo?.color
+            isPinned = trackerInfo?.isPinned ?? false
             updateAddButton()
         }
     }
+    
+    // MARK: - Private Properties
+    private let analyticsService = AnalyticsService()
+    
+    private let addButton = UIButton(type: .custom)
+    private let card = UIView()
+    private let circle = UIView()
+    private let emojiLabel = UILabel()
+    private let titleLabel = UILabel()
+    private let pinImageView = UIImageView()
+    private let daysCountLabel = UILabel()
     
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -52,6 +66,10 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         setupDaysCountLabel()
         
         contentView.layer.masksToBounds = true
+        
+        let contextMenu = UIContextMenuInteraction(delegate: self)
+        
+        card.addInteraction(contextMenu)
     }
     
     required init?(coder: NSCoder) {
@@ -61,6 +79,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     // MARK: - IBAction
     @objc
     func buttonClicked() {
+        analyticsService.report(event: .click, params: ["screen" : "Main", "item" : "track"])
         if !checkIfTrackerWasCompleted() {
             guard let id = trackerInfo?.id,
                   let currentDay = trackerInfo?.currentDay,
@@ -72,8 +91,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             counterDelegate?.increaseTrackerCounter(id: id, date: currentDay)
             daysCount = counterDelegate?.calculateTimesTrackerWasCompleted(id: id) ?? daysCount
         } else {
-            addButton.setImage(UIImage(named: "plus"), for: .normal)
-            addButton.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+            addButton.setImage(UIImage(systemName: "plus"), for: .normal)
             addButton.backgroundColor = color
             guard let id = trackerInfo?.id,
                   let currentDay = trackerInfo?.currentDay else { return }
@@ -96,17 +114,12 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     private func updateDaysCountLabel() {
-        let number = daysCount % 10
-        var days: String
-        switch number {
-        case 1:
-            days = "день"
-        case 2, 3, 4:
-            days = "дня"
-        default:
-            days = "дней"
-        }
-        daysCountLabel.text = String(daysCount) + " " + days
+        let daysRemaining = daysCount
+        let tasksString = String.localizedStringWithFormat(
+            NSLocalizedString("numberOfDays", comment: "Number of remaining days"),
+            daysRemaining
+        )
+        daysCountLabel.text = tasksString
     }
     
     private func updateAddButton() {
@@ -114,17 +127,18 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             addButton.setImage(UIImage(named: "done"), for: .normal)
             addButton.backgroundColor = color?.withAlphaComponent(0.3)
         } else {
-            addButton.setImage(UIImage(named: "plus"), for: .normal)
+            addButton.setImage(UIImage(systemName: "plus"), for: .normal)
             addButton.backgroundColor = color
         }
         addButton.layer.cornerRadius = 16
-        addButton.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        addButton.tintColor = .white
     }
     
     ///MARK: - Setup UI
     private func setupCard() {
         card.layer.cornerRadius = 16
         card.layer.masksToBounds = true
+        card.accessibilityIdentifier = "trackerBackground"
         card.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -213,6 +227,38 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             addButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             addButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12)
         ])
+    }
+}
+
+//MARK: - UIContextMenuInteractionDelegate
+extension TrackerCollectionViewCell: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        guard let trackerInfo = trackerInfo else {
+            return nil
+        }
+        
+        return UIContextMenuConfiguration(
+            identifier: nil,
+            previewProvider: nil,
+            actionProvider: { _ in
+                return AlertFactory.createContextMenu(
+                    trackerInfo: trackerInfo,
+                    isPinned: self.isPinned,
+                    pinTrackerHandler: { tracker in
+                        self.pinTrackerHandler?(tracker)
+                    },
+                    editTrackerHandler: { trackerInfo in
+                        self.editTrackerHandler?(trackerInfo)
+                    },
+                    deleteTrackerHandler: { tracker in
+                        self.deleteTrackerHandler?(tracker)
+                    }
+                )
+            }
+        )
     }
 }
 

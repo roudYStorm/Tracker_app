@@ -16,9 +16,14 @@ final class CategoryViewController: UIViewController, ViewConfigurable {
     
     private lazy var createCategoryButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(NSLocalizedString("category.add", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.backgroundColor = #colorLiteral(red: 0.1352768838, green: 0.1420838535, blue: 0.1778985262, alpha: 1)
+        button.setTitleColor(UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ?
+            #colorLiteral(red: 0.1019607843, green: 0.1058823529, blue: 0.1333333333, alpha: 1) :  // Текст в светлой теме
+            #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)  // Текст в тёмной теме
+        }, for: .normal)
+        button.backgroundColor = .buttonColor
         button.layer.cornerRadius = 16
         button.addTarget(self, action: #selector(createCategoryButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -31,15 +36,16 @@ final class CategoryViewController: UIViewController, ViewConfigurable {
         categoryTableView.dataSource = self
         categoryTableView.delegate = self
         
-        self.title = "Категория"
+        self.title = NSLocalizedString("category", comment: "")
         navigationItem.hidesBackButton = true
-        view.backgroundColor = .white
+        view.backgroundColor = .backgroudColor
         
         configureView()
         
         categoriesViewModel.categoriesBinding = { [weak self] _ in
             guard let self = self else {return}
-            self.categoryTableView.reloadData()
+            DispatchQueue.main.async {self.categoryTableView.reloadData()}
+           
         }
     }
     
@@ -69,7 +75,7 @@ final class CategoryViewController: UIViewController, ViewConfigurable {
         navigationController?.pushViewController(CategoryCreationViewController(), animated: true)
     }
     
-    private func showPlaceholder() {
+    private func showPlaceHolder() {
         let backgroundView = PlaceHolderView(frame: categoryTableView.frame)
         backgroundView.setUpNoCategories()
         categoryTableView.backgroundView = backgroundView
@@ -79,8 +85,8 @@ final class CategoryViewController: UIViewController, ViewConfigurable {
 //MARK: - TableView Data Source
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if (categoriesViewModel.numberOfRows == 0) {
-            showPlaceholder()
+        if categoriesViewModel.numberOfRows == 0 {
+            showPlaceHolder()
         } else {
             tableView.backgroundView = nil
         }

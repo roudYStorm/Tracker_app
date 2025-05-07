@@ -6,13 +6,6 @@ struct CreationTrackerViewControllerPreview: PreviewProvider {
         CreationTrackerViewController().showPreview()
     }
 }
-// MARK: - Types
-private enum Sections: Int, CaseIterable {
-    case name = 0
-    case buttons
-    case emoji
-    case color
-}
 
 class CreationTrackerViewController: UIViewController {
     
@@ -54,16 +47,14 @@ class CreationTrackerViewController: UIViewController {
     
     var saveButtonCanBePressed: Bool? {
         didSet {
-            switch saveButtonCanBePressed {
-            case true:
-                saveButton.backgroundColor = #colorLiteral(red: 0.1352768838, green: 0.1420838535, blue: 0.1778985262, alpha: 1)
+            let isEnabled = saveButtonCanBePressed ?? false
+            
+            if isEnabled {
                 saveButton.isEnabled = true
-            case false:
-                saveButton.backgroundColor = #colorLiteral(red: 0.9019607843, green: 0.9098039216, blue: 0.9215686275, alpha: 1)
+                updateSaveButtonAppearance(enabled: true)
+            } else {
                 saveButton.isEnabled = false
-            default:
-                saveButton.backgroundColor = #colorLiteral(red: 0.9019607843, green: 0.9098039216, blue: 0.9215686275, alpha: 1)
-                saveButton.isEnabled = false
+                updateSaveButtonAppearance(enabled: false)
             }
         }
     }
@@ -78,23 +69,28 @@ class CreationTrackerViewController: UIViewController {
     private let stackView = UIStackView()
     private let saveButton = UIButton()
     private let cancelButton = UIButton()
-    private let allEmojies = [ "🙂", "😻", "🌺", "🐶", "❤️", "😱",
-                               "😇", "😡", "🥶", "🤔", "🙌", "🍔",
-                               "🥦", "🏓", "🥇", "🎸", "🏝️", "😪"]
-    private let allColors = [UIColor.color1, .color2, .color3, .color4, .color5, .color6,
-                             .color7, .color8, .color9, .color10, .color11, .color12,
-                             .color13, .color14, .color15, .color16, .color17, .color18]
+    private let allEmojies = Constants.allEmojies
+    private let allColors = Constants.allColors
     
     // MARK: - Public Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .backgroudColor
         setupStackView()
         setupCollectionView()
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        // Проверяем, изменилась ли цветовая схема (светлая/темная тема)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateCancelButtonBackgroundColor()  // Обновляем фон cancelButton при смене темы
+        }
     }
     
     // MARK: - IBAction
@@ -114,13 +110,15 @@ class CreationTrackerViewController: UIViewController {
         guard let name = trackerName,
               let color = selectedColor,
               let emoji = selectedEmoji,
-              let categoryTitle = trackerCategory?.title else { return }
+              let categoryTitle = trackerCategory?.title
+        else { return }
         let tracker = Tracker(
             name: name,
             color: color,
             emoji: emoji,
             schedule: selectedWeekDays,
-            state: .Habit
+            state: .Habit,
+            isPinned: false
         )
         
         creationDelegate?.createTracker(tracker: tracker, category: categoryTitle)
@@ -132,7 +130,9 @@ class CreationTrackerViewController: UIViewController {
     
     ///MARK: - Setup StackView And Buttons
     private func setupSaveButton() {
-        saveButton.setTitle("Создать", for: .normal)
+        saveButton.setTitle(NSLocalizedString("save", comment: ""), for: .normal)
+        saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        saveButton.titleLabel?.textColor = .white
         saveButton.backgroundColor = #colorLiteral(red: 0.6823529412, green: 0.6862745098, blue: 0.7058823529, alpha: 1)
         saveButton.layer.cornerRadius = 16
         saveButton.addTarget(self, action: #selector(saveButtonPressed), for: .touchUpInside)
@@ -144,20 +144,53 @@ class CreationTrackerViewController: UIViewController {
     }
     
     private func setupCancelButton() {
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(NSLocalizedString("cancel", comment: ""), for: .normal)
         cancelButton.clipsToBounds = true
-        cancelButton.setTitleColor(.red, for: .normal)
+        cancelButton.setTitleColor(#colorLiteral(red: 0.9607843137, green: 0.4196078431, blue: 0.4235294118, alpha: 1), for: .normal)
         cancelButton.layer.cornerRadius = 16
         cancelButton.layer.masksToBounds = true
         cancelButton.layer.borderWidth = 1
         cancelButton.layer.borderColor = #colorLiteral(red: 0.9607843137, green: 0.4196078431, blue: 0.4235294118, alpha: 1)
-        cancelButton.layer.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        updateCancelButtonBackgroundColor()
         cancelButton.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             cancelButton.heightAnchor.constraint(equalToConstant: 60)
         ])
+    }
+    
+    private func updateSaveButtonAppearance(enabled: Bool) {
+        if enabled {
+            // Кнопка активна, настройка фона для активного состояния
+            if #available(iOS 13.0, *) {
+                saveButton.backgroundColor = UIColor { traitCollection -> UIColor in
+                    switch traitCollection.userInterfaceStyle {
+                    case .dark:
+                        // Белый фон с черным текстом для темной темы
+                        self.saveButton.setTitleColor(#colorLiteral(red: 0.1019607843, green: 0.1058823529, blue: 0.1333333333, alpha: 1), for: .normal)
+                        return #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+                    default:
+                        // Черный фон с белым текстом для светлой темы
+                        self.saveButton.setTitleColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
+                        return #colorLiteral(red: 0.1019607843, green: 0.1058823529, blue: 0.1333333333, alpha: 1)
+                    }
+                }
+            }
+        } else {
+            saveButton.backgroundColor = #colorLiteral(red: 0.6823529412, green: 0.6862745098, blue: 0.7058823529, alpha: 1)
+            saveButton.setTitleColor(.white, for: .normal)
+        }
+    }
+    
+    private func updateCancelButtonBackgroundColor() {
+        if #available(iOS 13.0, *) {
+            cancelButton.layer.backgroundColor = UIColor { (traitCollection: UITraitCollection) -> UIColor in
+                return traitCollection.userInterfaceStyle == .dark ?
+                #colorLiteral(red: 0.1019607843, green: 0.1058823529, blue: 0.1333333333, alpha: 1) :  // Цвет для тёмной темы
+                #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)  // Цвет для светлой темы
+            }.cgColor
+        }
     }
     
     private func setupStackView() {

@@ -44,6 +44,16 @@ final class ColorCell: UICollectionViewCell, ViewConfigurable {
         ])
     }
     
+    // MARK: - Public Methods
+    func setColor(with color: UIColor) {
+        colorView.backgroundColor = color
+    }
+    
+    func getColor() -> UIColor {
+        guard let color = colorView.backgroundColor else { return UIColor() }
+        return color
+    }
+    
     // MARK: - Private Methods
     internal func configureView() {
         addSubviews()

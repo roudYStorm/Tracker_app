@@ -1,7 +1,6 @@
 import UIKit
 
-final class PlaceHolderView
-: UIView {
+final class PlaceHolderView: UIView {
     
     // MARK: - Private Properties
     private let imageView = UIImageView()
@@ -19,23 +18,22 @@ final class PlaceHolderView
     }
     
     // MARK: - Public Methods
-    
     func setupNoTrackersState() {
-        imageView.image = UIImage(named: "star")
-        label.text = "Что будем отслеживать?"
+        imageView.image = UIImage(named: "starIcon")
+        label.text = NSLocalizedString("placeholder.noTrackers", comment: "")
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center
     }
     
     func setupNoSearchResultsState() {
         imageView.image = UIImage(named: "notFound")
-        label.text = "Ничего не найдено"
+        label.text = NSLocalizedString("placeholder.noSearchResults", comment: "")
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center
     }
     
     func setUpNoCategories() {
-        let image = UIImage(named: "star")
+        let image = UIImage(named: "starIcon")
         imageView.image = image
         
         // Настраиваем стиль параграфа
@@ -43,7 +41,7 @@ final class PlaceHolderView
         paragraphStyle.lineSpacing = 18 - UIFont.systemFont(ofSize: 12, weight: .medium).lineHeight
         
         let attributedText = NSAttributedString(
-            string: "Привычки и события можно \n объединить по смыслу",
+            string: NSLocalizedString("placeholder.noCategories", comment: ""),
             attributes: [
                 .font: UIFont.systemFont(ofSize: 12, weight: .medium),
                 .paragraphStyle: paragraphStyle
@@ -57,27 +55,30 @@ final class PlaceHolderView
     }
     
     func setupNoStatisticState() {
-        // TODO:
+        let image = UIImage(named: "cryIcon")
+        imageView.image = image
+        label.text = NSLocalizedString("placeholder.noStatistics", comment: "")
+        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        label.textAlignment = .center
     }
     
     // MARK: - Private Methods
     private func setupView() {
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(imageView)
-        
+        label.textAlignment = .center
+        [imageView, label].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            addSubview($0)
+        }
+        addConstraint ()
+    }
+    
+    private func addConstraint () {
         NSLayoutConstraint.activate([
             imageView.widthAnchor.constraint(equalToConstant: 80),
             imageView.heightAnchor.constraint(equalToConstant: 80),
-            imageView.topAnchor.constraint(equalTo: topAnchor, constant: 223),
-            imageView.centerXAnchor.constraint(equalTo: centerXAnchor)
-        ])
-        
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(label)
-        
-        NSLayoutConstraint.activate([
-           // label.heightAnchor.constraint(equalToConstant: 18),
+            imageView.topAnchor.constraint(equalTo: topAnchor, constant: 193),
+            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            
             label.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
             label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
