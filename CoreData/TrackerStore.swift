@@ -49,6 +49,14 @@ final class TrackerStore: NSObject {
     }
     
     func addNewTracker(tracker: Tracker, forCategory category: String) throws {
+        
+        guard Thread.isMainThread else {
+                DispatchQueue.main.async { [weak self] in
+                    try? self?.addNewTracker(tracker: tracker, forCategory: category)
+                }
+                return
+            }
+
         _ = self.fetchedResultsController.fetchedObjects
         
         let trackerCoreData = TrackerCoreData(context: context)
@@ -88,6 +96,12 @@ final class TrackerStore: NSObject {
     }
     
     func updateTracker(tracker: Tracker, category: TrackerCategory) throws {
+        guard Thread.isMainThread else {
+                DispatchQueue.main.async { [weak self] in
+                    try? self?.updateTracker(tracker: tracker, category: category)
+                }
+                return
+            }
         let trackerCategoryStore = TrackerCategoryStore(context: context)
         
         do {
