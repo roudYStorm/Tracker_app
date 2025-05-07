@@ -44,7 +44,8 @@ final class CategoryViewController: UIViewController, ViewConfigurable {
         
         categoriesViewModel.categoriesBinding = { [weak self] _ in
             guard let self = self else {return}
-            self.categoryTableView.reloadData()
+            DispatchQueue.main.async {self.categoryTableView.reloadData()}
+           
         }
     }
     

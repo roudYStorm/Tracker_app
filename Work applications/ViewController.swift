@@ -71,11 +71,11 @@ final class TrackerViewController: UIViewController, ViewConfigurable {
     // MARK: - methods ViewControllera
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        presenter.reportToAnalyticService(event: .open, params: ["screen" : "Main"])
+        presenter.reportToAnalyticService(event: .open, params: ["screen" : "Main", "item": "did_appear"])
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        presenter.reportToAnalyticService(event: .close, params: ["screen" : "Main"])
+        presenter.reportToAnalyticService(event: .close, params: ["screen" : "Main", "item": "did_disappear"])
         super.viewDidDisappear(animated)
     }
     
@@ -109,6 +109,8 @@ final class TrackerViewController: UIViewController, ViewConfigurable {
     
     @objc
     private func filterButtonPressed() {
+        presenter.reportToAnalyticService(event: .click, params: ["screen" : "Main", "item" : "filter"])
+        // аналитика тут
         presenter.filterButtonPressed()
     }
     
@@ -230,6 +232,7 @@ final class TrackerViewController: UIViewController, ViewConfigurable {
     
     private func editTracker(tracker: TrackerInfoCell, category: TrackerCategory) {
         presenter.editTracker(tracker: tracker, category: category)
+        presenter.reportToAnalyticService(event: .click, params: ["screen" : "Main", "item" : "edit"])
     }
     func presentViewController(vc: UIViewController) {
         let navVC = UINavigationController(rootViewController: vc)
